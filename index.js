@@ -13,7 +13,7 @@ var fullurl;
 // var locationArray = [];
 // var multiPoint = [][];
 
-var geometry = [{}];
+var crashdb = [];
 //   {
 //     x: 0,
 //     y: 0
@@ -48,15 +48,18 @@ app.get("/", function(req, res) {
           //   locations[locationName].latitude,
           //   locations[locationName].longitude
           // );
-          geometry.push({
+          var date = new Date();
+          crashdb.push({
+            datetime: date,
+            location: locationName,
             x: locations[locationName].latitude,
             y: locations[locationName].longitude
           });
-          console.log('geometry = ', geometry);
+          console.log('crashdb = ', crashdb);
         }
       }
     });
-    res.send(geometry);
+    res.send(crashdb);
   });
 });
 
@@ -67,6 +70,8 @@ io.on("connection", function(socket) {
 http.listen(3000, function() {
   console.log("listening on *:3000");
 
+
+  // store these in systemd service per
   var twit = new Twit({
     consumer_key: "7lFDwAtmqt7MbQPl0RctMRoV6",
     consumer_secret: "bxFlEGBsDRIHRiKANoCLC6yzAhRSNE6QRzX8wrrEeybdkgKzM9",
