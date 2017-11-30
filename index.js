@@ -6,13 +6,16 @@ var https = require("https");
 var redis = require("redis"),
     client = redis.createClient();
 var request = require("request");
+var cors = require('cors')
+
+app.use(cors());
 
 var geo = require("georedis").initialize(client);
 var cleansedAddress;
 var fullurl;
 // var locationArray = [];
 // var multiPoint = [][];
-
+var raleighPoint;
 var crashdb = [];
 //   {
 //     x: 0,
@@ -39,8 +42,10 @@ app.get("/", function(req, res) {
         // count: 100, // Number of results to return, default undefined
         accurate: true // Useful if in emulated mode and accuracy is important, default false
     }
-
+    raleighPoint = JSON.stringify({latitude: 35.8, longitude: -78.65});
+    // raleighPoint.push("-78.65");
     geo.nearby({ latitude: 35.8, longitude: -78.65 }, 50000, options, function(
+    // geo.nearby(raleighPoint, 50000, options, function(
         err,
         locations
     ) {
@@ -134,7 +139,8 @@ http.listen(3000, function() {
             this.coords = parsed.candidates[0].location;
             console.log("parsed = ", parsed.candidates[0].location);
             geo.addLocation(
-                cleansedAddress, { latitude: this.coords.y, longitude: this.coords.x },
+                // cleansedAddress, { latitude: this.coords.y, longitude: this.coords.x },
+                cleansedAddress, this.coords,
                 function(err, reply) {
                     if (err) console.error(err);
                     else console.log("added location:", reply);
