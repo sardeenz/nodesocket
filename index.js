@@ -24,7 +24,8 @@ var crashdb = [];
 // ];
 
 app.get("/", function(req, res) {
-    io.emit("messageFromServer", "I sent this from the server");
+    //io.emit("messageFromServer", "I sent this from the server");
+    
     //res.send("hello world");
     // geo.location(cleansedAddress, function(err, location){
     //   if(err) {
@@ -138,9 +139,11 @@ http.listen(3000, function() {
             var parsed = JSON.parse(body);
             this.coords = parsed.candidates[0].location;
             console.log("parsed = ", parsed.candidates[0].location);
+            console.log("typeof parsed = ", typeof parsed.candidates[0].location);
+            
             geo.addLocation(
-                // cleansedAddress, { latitude: this.coords.y, longitude: this.coords.x },
-                cleansedAddress, this.coords,
+                cleansedAddress, { latitude: this.coords.y, longitude: this.coords.x },
+                //cleansedAddress, this.coords,
                 function(err, reply) {
                     if (err) console.error(err);
                     else console.log("added location:", reply);
